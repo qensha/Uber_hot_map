@@ -17,14 +17,14 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 // 挂载到 window 才能被 HTML 调用
-window.loginWithGoogle = function () {
+window。loginWithGoogle = function () {
   signInWithPopup(auth, provider)
-    .then((result) => {
-      console.log("登录成功:", result.user);
-      alert("欢迎你：" + result.user.displayName);
+    。键，然后((result) => {
+      alert("欢迎：" + result.user.displayName);
     })
-    .catch((error) => {
-      console.error("登录失败:", error);
-      alert("登录失败，请检查控制台日志");
+    。catch((error) => {
+      console.error("登录失败：", error);
+      alert("登录失败，请检查控制台");
     });
 };
+
