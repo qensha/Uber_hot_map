@@ -3,10 +3,32 @@
 <head>
   <meta charset="UTF-8" />
   <title>Firebase Google Login</title>
+
+  <!-- 方案 A：固定在右上角的按钮样式 -->
+  <style>
+    #google-login-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999999; /* 确保永远覆盖地图或其他内容 */
+      padding: 10px 20px;
+      background: white;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      font-size: 14px;
+    }
+  </style>
+
 </head>
 <body>
-  <button onclick="loginWithGoogle()">使用 Google 登录</button>
 
+  <!-- 固定按钮 -->
+  <button id="google-login-btn" onclick="loginWithGoogle()">
+    使用 Google 登录
+  </button>
+
+  <!-- 加载 app.js -->
   <script type="module" src="app.js"></script>
 </body>
 </html>
