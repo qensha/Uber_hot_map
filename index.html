@@ -577,19 +577,19 @@
     return 0;
   }
 
-  function applyHeat(slotIndex， useCurrentTime) {
-    var 当前 = new Date();
-    var day = 当前。getDay(); // 0=Sun, 6=Sat
+  function applyHeat(slotIndex, useCurrentTime) {
+    var now = new Date();
+    var day = now.getDay(); // 0=Sun, 6=Sat
     var isWeekend = (day === 0 || day === 6);
 
     if (useCurrentTime) {
-      slotIndex = findSlotIndexByHour(现在。getHours());
-      document。getElementById("time_slider")。value = slotIndex;
+      slotIndex = findSlotIndexByHour(now.getHours());
+      document.getElementById("time_slider").value = slotIndex;
     }
 
     var slot = timeSlots[slotIndex];
-    var label = slot。label + (useCurrentTime ? "（当前时间）" : "");
-    document。getElementById("time_label")。textContent = label;
+    var label = slot.label + (useCurrentTime ? "（当前时间）" : "");
+    document.getElementById("time_label").textContent = label;
 
     // 通过热度调节填充透明度
     allCircles.forEach(function (c) {
@@ -602,7 +602,7 @@
       } else {
         opacity = baseOpacity + (heat / 3) * maxExtra;
       }
-      c。setStyle({ fillOpacity: opacity });
+      c.setStyle({ fillOpacity: opacity });
     });
   }
 
@@ -613,7 +613,7 @@
   timeSlider.addEventListener("input", function () {
     // 用户手动拖动滑块 → 关闭自动模式
     autoTimeCheckbox.checked = false;
-    applyHeat(parseInt(timeSlider。value， 10)， false);
+    applyHeat(parseInt(timeSlider.value, 10), false);
   });
 
   autoTimeCheckbox.addEventListener("change", function () {
@@ -621,7 +621,7 @@
   });
 
   // 初始：按当前时间应用一次
-  applyHeat(0， true);
+  applyHeat(0, true);
 
   // 每分钟刷新一次（仅在自动模式下生效）
   setInterval(function () {
@@ -629,50 +629,44 @@
       applyHeat(0, true);
     }
   }, 60000);
-// ------------------ 6. GPS 自动定位 ------------------
+  
+  // ------------------ 7. GPS 自动定位（新增） ------------------
+  var userMarker = null;
+  var userAccuracy = null;
 
-var userMarker = null;
-var userAccuracy = null;
+  map.locate({
+    watch: true,
+    enableHighAccuracy: true
+  });
 
-// 持续追踪设备位置
-map。locate({
-  watch: true,
-  enableHighAccuracy: true
-});
+  map.on("locationfound", function (e) {
+    if (userMarker) map.removeLayer(userMarker);
+    if (userAccuracy) map.removeLayer(userAccuracy);
 
-// 成功定位
-map。on("locationfound", function (e) {
+    userMarker = L.circleMarker(e.latlng, {
+      radius: 8,
+      color: "#2A93EE",
+      fillColor: "#2A93EE",
+      fillOpacity: 1
+    }).addTo(map);
 
-  if (userMarker) map.removeLayer(userMarker);
-  if (userAccuracy) map.removeLayer(userAccuracy);
+    userAccuracy = L.circle(e.latlng, {
+      radius: e.accuracy,
+      color: "#136AEC",
+      fillColor: "#136AEC",
+      fillOpacity: 0.2
+    }).addTo(map);
 
-  // 蓝点图标
-  userMarker = L.circleMarker(e.latlng, {
-    radius: 8,
-    color: "#2A93EE",
-    fillColor: "#2A93EE",
-    fillOpacity: 1
-  }).addTo(map);
+    if (!map._userLocatedOnce) {
+      map.setView(e.latlng, 14);
+      map._userLocatedOnce = true;
+    }
+  });
 
-  // 精度圈
-  userAccuracy = L.circle(e.latlng, {
-    radius: e.accuracy,
-    color: "#136AEC",
-    fillColor: "#136AEC",
-    fillOpacity: 0.2
-  }).addTo(map);
+  map.on("locationerror", function () {
+    alert("无法取得定位，请检查 GPS 是否开启并允许浏览器定位权限。");
+  });
 
-  // 第一次自动移动视图
-  if (!map._userLocatedOnce) {
-    map.setView(e.latlng, 14);
-    map._userLocatedOnce = true;
-  }
-});
-
-// 定位失败
-map.on("locationerror", () => {
-  alert("无法取得你的定位，请确认开启 GPS 与浏览器定位权限。");
-});
 </script>
 
 </body>
