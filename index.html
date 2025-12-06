@@ -432,75 +432,7 @@
   var allCircles = []; // 用于时间热力调整
 
   zones。forEach(function (z) {
-    // ------------------ 设备 GPS 定位 ------------------
-
-var userMarker = null;
-var userAccuracy = null;
-
-// 自动请求定位
-map。locate({
-  watch: true,       // 持续追踪
-  enableHighAccuracy: true
-});
-
-// 定位成功事件
-map。于("locationfound"， function (e) {
-  // 移除旧的标记
-  if (userMarker) map.removeLayer(userMarker);
-  if (userAccuracy) map.removeLayer(userAccuracy);
-
-  // 添加当前位置图标（蓝点）
-  userMarker = L。circleMarker(e。latlng, {
-    radius: 8,
-    color: "#2A93EE",
-    fillColor: "#2A93EE",
-    fillOpacity: 1
-  })。addTo(map);
-
-  // 精度圆圈
-  userAccuracy = L.circle(e.latlng, {
-    radius: e.accuracy,
-    color: "#136AEC",
-    fillColor: "#136AEC",
-    fillOpacity: 0.2
-  }).addTo(map);
-
-  // 第一次自动移到用户位置
-  if (!map._userLocatedOnce) {
-    map.setView(e.latlng, 14);
-    map._userLocatedOnce = true;
-  }
-});
-
-// 定位失败事件
-map.on("locationerror", function (e) {
-  alert("无法取得你的定位，请确认：\n\n1. 已开启 GPS\n2. 已允许浏览器定位权限");
-});
-    var color = "green";
-    if (z。category === "DEAD") color = "red";
-    if (z。category === "PREMIUM") color = "yellow";
-
-    var circle = L.circle([z.lat, z.lng], {
-      color: color,
-      fillColor: color,
-      fillOpacity: 0.35,
-      radius: milesToMeters(z。radius_mi),
-      weight: 3
-    });
-
-    var popupHtml =
-      "<b>" + z.name + "</b><br>" +
-      (z.note ? z.note + "<br>" : "") +
-      "半径: " + z。radius_mi.toFixed(1) + " mi";
-
-    circle.bindPopup(popupHtml);
-    circle.zoneName = z.name;
-    circle.zoneCategory = z.category;
-
-    if (z.category === "HOT") circle.addTo(hotGroup);
-    else if (z.category === "DEAD") circle.addTo(deadGroup);
-    else if (z.category === "PREMIUM") circle.addTo(premiumGroup);
-    return mi * 1609.34;
+   return mi * 1609.34;
   }
    allCircles.push(circle);
   });
