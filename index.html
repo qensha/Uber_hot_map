@@ -75,8 +75,8 @@
   <h4>图层</h4>
   <div class="layer-toggles">
     <label><input type="checkbox" id="chk_hot" checked> HOT 热区（绿色）</label>
-    <label><input type="checkbox" id="chk_dead" checked> DEAD 死区（红色）</label>
-    <label><input type="checkbox" id="chk_premium" checked> PREMIUM 小费顶级（黄色）</label>
+    <label><input 输入="checkbox" id="chk_dead" checked> DEAD 死区（红色）</label>
+    <label><input 输入="checkbox" id="chk_premium" checked> PREMIUM 小费顶级（黄色）</label>
   </div>
 
   <hr style="margin:6px 0;">
@@ -100,27 +100,27 @@
 
 <script>
   // ------------------ 1. 初始化地图 ------------------
-  var map = L.map('map', {
+  var map = L。map('map', {
     center: [37.6, -122.1],
     zoom: 9
   });
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  L。tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'， {
     attribution: 'Data © OpenStreetMap contributors'
-  }).addTo(map);
+  })。addTo(map);
 
   // ------------------ 2. 区域数据（HOT / DEAD / PREMIUM） ------------------
   // 半径单位：英里
   var zones = [
     // HOT 区域（绿色）
     {
-      name: "SFO",
+      name: "SFO"，
       category: "HOT",
       lat: 37.6213，
       lng: -122.379，
       radius_mi: 2.0，
       note: "无脑接，回程单极快"
-    },
+    }，
     {
       name: "San Jose Downtown"，
       category: "HOT"，
@@ -138,7 +138,7 @@
       note: "短单多，小费好"
     }，
     {
-      name: "Half Moon Bay",
+      name: "Half Moon Bay"，
       category: "HOT",
       lat: 37.4636，
       lng: -122.4286,
@@ -148,13 +148,13 @@
     {
       name: "Downtown San Francisco Core"，
       category: "HOT",
-      lat: 37.789,
+      lat: 37.789，
       lng: -122.401,
       radius_mi: 1.8，
       note: "金融区+Union Square+SoMa"
     }，
     {
-      name: "Fishermans Wharf & Pier 39",
+      name: "Fishermans Wharf & Pier 39"，
       category: "HOT",
       lat: 37.808，
       lng: -122.417，
@@ -162,7 +162,7 @@
       note: "渔人码头+Pier 39"
     }，
     {
-      name: "Mission & Castro Nightlife",
+      name: "Mission & Castro Nightlife"，
       category: "HOT"，
       lat: 37.759，
       lng: -122.426，
@@ -170,9 +170,9 @@
       note: "Mission/Castro 夜生活"
     }，
     {
-      name: "Marina & Cow Hollow",
+      name: "Marina & Cow Hollow"，
       category: "HOT",
-      lat: 37.8,
+      lat: 37.8，
       lng: -122.438,
       radius_mi: 1.0，
       note: "高收入住宅+餐饮"
@@ -180,27 +180,27 @@
     {
       name: "Oakland Downtown & Lake Merritt"，
       category: "HOT",
-      lat: 37.804,
+      lat: 37.804，
       lng: -122.271，
-      radius_mi: 1.6,
+      radius_mi: 1.6，
       note: "Oakland 市中心+湖区"
     }，
     {
       name: "Jack London Square",
       category: "HOT",
       lat: 37.795,
-      lng: -122.278,
+      lng: -122.278，
       radius_mi: 0.9，
       note: "港口餐饮区"
-    },
+    }，
     {
       name: "UC Berkeley & Downtown Berkeley"，
       category: "HOT"，
       lat: 37.87，
       lng: -122.268，
-      radius_mi: 1.2,
+      radius_mi: 1.2，
       note: "校园+商业"
-    },
+    }，
     {
       name: "Walnut Creek Downtown"，
       category: "HOT"，
@@ -227,9 +227,9 @@
     }，
     {
       name: "Millbrae Transit & Hotel Strip"，
-      category: "HOT",
-      lat: 37.598,
-      lng: -122.386,
+      category: "HOT"，
+      lat: 37.598，
+      lng: -122.386，
       radius_mi: 1.2，
       note: "交通枢纽+酒店带"
     }，
@@ -424,10 +424,7 @@
   ];
 
   function milesToMeters(mi) {
-    return mi * 1609.34;
-  }
-
-  // ------------------ 3. 建立图层与圆圈对象 ------------------
+    // ------------------ 3. 建立图层与圆圈对象 ------------------
   var hotGroup = L.featureGroup().addTo(map);
   var deadGroup = L.featureGroup().addTo(map);
   var premiumGroup = L.featureGroup().addTo(map);
@@ -441,24 +438,24 @@ var userMarker = null;
 var userAccuracy = null;
 
 // 自动请求定位
-map.locate({
+map。locate({
   watch: true,       // 持续追踪
   enableHighAccuracy: true
 });
 
 // 定位成功事件
-map.on("locationfound", function (e) {
+map。于("locationfound"， function (e) {
   // 移除旧的标记
   if (userMarker) map.removeLayer(userMarker);
   if (userAccuracy) map.removeLayer(userAccuracy);
 
   // 添加当前位置图标（蓝点）
-  userMarker = L.circleMarker(e.latlng, {
+  userMarker = L。circleMarker(e。latlng, {
     radius: 8,
     color: "#2A93EE",
     fillColor: "#2A93EE",
     fillOpacity: 1
-  }).addTo(map);
+  })。addTo(map);
 
   // 精度圆圈
   userAccuracy = L.circle(e.latlng, {
@@ -503,8 +500,9 @@ map.on("locationerror", function (e) {
     if (z.category === "HOT") circle.addTo(hotGroup);
     else if (z.category === "DEAD") circle.addTo(deadGroup);
     else if (z.category === "PREMIUM") circle.addTo(premiumGroup);
-
-    allCircles.push(circle);
+    return mi * 1609.34;
+  }
+   allCircles.push(circle);
   });
 
   // ------------------ 4. 图层开关（HOT / DEAD / PREMIUM） ------------------
