@@ -74,9 +74,9 @@
 <div id="ui-panel">
   <h4>图层</h4>
   <div class="layer-toggles">
-    <label><input 输入="checkbox" id="chk_hot" checked> HOT 热区（绿色）</label>
-    <label><input 输入="checkbox" id="chk_dead" checked> DEAD 死区（红色）</label>
-    <label><input 输入="checkbox" id="chk_premium" checked> PREMIUM 小费顶级（黄色）</label>
+    <label><input type="checkbox" id="chk_hot" checked> HOT 热区（绿色）</label>
+    <label><input type="checkbox" id="chk_dead" checked> DEAD 死区（红色）</label>
+    <label><input type="checkbox" id="chk_premium" checked> PREMIUM 小费顶级（黄色）</label>
   </div>
 
   <hr style="margin:6px 0;">
@@ -88,7 +88,7 @@
     <div id="time_label"></div>
 
     <label style="margin-top:6px;">
-      <input 输入="checkbox" id="auto_time" checked>
+      <input type="checkbox" id="auto_time" checked>
       B：自动跟随当前时间
     </label>
 
@@ -100,14 +100,14 @@
 
 <script>
   // ------------------ 1. 初始化地图 ------------------
-  var map = L。map('map'， {
+  var map = L.map('map', {
     center: [37.6, -122.1],
     zoom: 9
   });
 
-  L。tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'， {
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: 'Data © OpenStreetMap contributors'
-  })。addTo(map);
+  }).addTo(map);
 
   // ------------------ 2. 区域数据（HOT / DEAD / PREMIUM） ------------------
   // 半径单位：英里
@@ -115,52 +115,52 @@
     // HOT 区域（绿色）
     {
       name: "SFO",
-      category: "HOT"，
+      category: "HOT",
       lat: 37.6213,
-      lng: -122.379，
-      radius_mi: 2.0，
+      lng: -122.379,
+      radius_mi: 2.0,
       note: "无脑接，回程单极快"
-    }，
+    },
     {
       name: "San Jose Downtown",
       category: "HOT",
-      lat: 37.3382，
-      lng: -121.8863，
+      lat: 37.3382,
+      lng: -121.8863,
       radius_mi: 1.5,
       note: "周末夜间 Surge 高"
-    }，
+    },
     {
-      name: "Palo Alto"，
-      category: "HOT"，
-      lat: 37.4419,
-      lng: -122.143，
-      radius_mi: 2.0，
-      note: "短单多，小费好"
-    }，
-    {
-      name: "Half Moon Bay"，
+      name: "Palo Alto",
       category: "HOT",
-      lat: 37.4636，
-      lng: -122.4286，
+      lat: 37.4419,
+      lng: -122.143,
+      radius_mi: 2.0,
+      note: "短单多，小费好"
+    },
+    {
+      name: "Half Moon Bay",
+      category: "HOT",
+      lat: 37.4636,
+      lng: -122.4286,
       radius_mi: 3.0,
       note: "92 号公路常堵"
-    }，
+    },
     {
       name: "Downtown San Francisco Core",
-      category: "HOT"，
-      lat: 37.789，
+      category: "HOT",
+      lat: 37.789,
       lng: -122.401,
-      radius_mi: 1.8，
+      radius_mi: 1.8,
       note: "金融区+Union Square+SoMa"
     },
     {
       name: "Fishermans Wharf & Pier 39",
       category: "HOT",
       lat: 37.808,
-      lng: -122.417，
-      radius_mi: 1.2，
+      lng: -122.417,
+      radius_mi: 1.2,
       note: "渔人码头+Pier 39"
-    }，
+    },
     {
       name: "Mission & Castro Nightlife",
       category: "HOT",
@@ -170,33 +170,33 @@
       note: "Mission/Castro 夜生活"
     },
     {
-      name: "Marina & Cow Hollow"，
-      category: "HOT"，
-      lat: 37.8，
-      lng: -122.438，
-      radius_mi: 1.0，
+      name: "Marina & Cow Hollow",
+      category: "HOT",
+      lat: 37.8,
+      lng: -122.438,
+      radius_mi: 1.0,
       note: "高收入住宅+餐饮"
     },
     {
       name: "Oakland Downtown & Lake Merritt",
       category: "HOT",
-      lat: 37.804，
+      lat: 37.804,
       lng: -122.271,
-      radius_mi: 1.6，
+      radius_mi: 1.6,
       note: "Oakland 市中心+湖区"
     },
     {
-      name: "Jack London Square"，
-      category: "HOT"，
-      lat: 37.795，
-      lng: -122.278，
-      radius_mi: 0.9，
+      name: "Jack London Square",
+      category: "HOT",
+      lat: 37.795,
+      lng: -122.278,
+      radius_mi: 0.9,
       note: "港口餐饮区"
     },
     {
       name: "UC Berkeley & Downtown Berkeley",
       category: "HOT",
-      lat: 37.87，
+      lat: 37.87,
       lng: -122.268,
       radius_mi: 1.2,
       note: "校园+商业"
@@ -204,8 +204,8 @@
     {
       name: "Walnut Creek Downtown",
       category: "HOT",
-      lat: 37.901，
-      lng: -122.061，
+      lat: 37.901,
+      lng: -122.061,
       radius_mi: 1.3,
       note: "郊区热点"
     },
@@ -218,17 +218,17 @@
       note: "通勤+购物"
     },
     {
-      name: "SFO Airport"，
-      category: "HOT"，
-      lat: 37.615，
-      lng: -122.39，
+      name: "SFO Airport",
+      category: "HOT",
+      lat: 37.615,
+      lng: -122.39,
       radius_mi: 2.5,
       note: "大型机场需求"
     },
     {
       name: "Millbrae Transit & Hotel Strip",
       category: "HOT",
-      lat: 37.598，
+      lat: 37.598,
       lng: -122.386,
       radius_mi: 1.2,
       note: "交通枢纽+酒店带"
@@ -236,7 +236,7 @@
     {
       name: "San Mateo & Bridgepointe",
       category: "HOT",
-      lat: 37.563，
+      lat: 37.563,
       lng: -122.325,
       radius_mi: 1.6,
       note: "办公+购物"
@@ -474,9 +474,9 @@
     else map.removeLayer(deadGroup);
   });
 
-  document。getElementById("chk_premium")。addEventListener("change", function (e) {
-    if (e。target.checked) map.addLayer(premiumGroup);
-    else map。removeLayer(premiumGroup);
+  document.getElementById("chk_premium").addEventListener("change", function (e) {
+    if (e.target.checked) map.addLayer(premiumGroup);
+    else map.removeLayer(premiumGroup);
   });
 
   // ------------------ 5. 时间热力配置（A+B 两种模式共用） ------------------
@@ -492,77 +492,77 @@
   // 每个区域的时间热力曲线（0–3）
   var zoneHeatProfiles = {
     "Palo Alto / Stanford / Menlo Park - Premium": {
-      weekday: [0， 2, 2, 2, 1, 0],
+      weekday: [0, 2, 2, 2, 1, 0],
       weekend: [0, 1, 2, 2, 2, 0]
     },
     "San Francisco Downtown (FiDi–SoMa) - Premium": {
-      weekday: [1， 3, 3, 3, 2, 1],
-      weekend: [0， 1, 2, 2, 3, 2]
-    }，
+      weekday: [1, 3, 3, 3, 2, 1],
+      weekend: [0, 1, 2, 2, 3, 2]
+    },
     "Mountain View / Sunnyvale Tech Corridor - Premium": {
-      weekday: [0， 2, 3, 2, 1, 0],
+      weekday: [0, 2, 3, 2, 1, 0],
       weekend: [0, 1, 1, 1, 1, 0]
     },
     "Santana Row & Valley Fair - Premium": {
-      weekday: [0， 1, 1, 2, 3, 2],
-      weekend: [0， 1, 2, 3, 3, 2]
-    }，
+      weekday: [0, 1, 1, 2, 3, 2],
+      weekend: [0, 1, 2, 3, 3, 2]
+    },
     "SFO Airport - Premium": {
-      weekday: [2， 3, 2, 2, 2, 2],
+      weekday: [2, 3, 2, 2, 2, 2],
       weekend: [2, 3, 2, 2, 2, 2]
     },
     // 把 PREMIUM 的模式同步到相关 HOT 区域
     "Palo Alto": {
-      weekday: [0, 2, 2， 2, 1, 0],
-      weekend: [0， 1， 2, 2, 2, 0]
+      weekday: [0, 2, 2, 2, 1, 0],
+      weekend: [0, 1, 2, 2, 2, 0]
     },
     "Palo Alto & Stanford Campus": {
       weekday: [0, 2, 2, 2, 1, 0],
-      weekend: [0， 1， 2, 2, 2， 0]
-    }，
+      weekend: [0, 1, 2, 2, 2, 0]
+    },
     "Downtown San Francisco Core": {
       weekday: [1, 3, 3, 3, 2, 1],
-      weekend: [0， 1, 2， 2, 3, 2]
+      weekend: [0, 1, 2, 2, 3, 2]
     },
     "Mountain View Castro Street": {
-      weekday: [0， 2， 3, 2, 1, 0],
-      weekend: [0， 1， 1, 1， 1， 0]
-    }，
+      weekday: [0, 2, 3, 2, 1, 0],
+      weekend: [0, 1, 1, 1, 1, 0]
+    },
     "Googleplex Area": {
-      weekday: [0， 2， 3, 2, 1, 0]，
-      weekend: [0， 1, 1, 1, 1, 0]
-    }，
+      weekday: [0, 2, 3, 2, 1, 0],
+      weekend: [0, 1, 1, 1, 1, 0]
+    },
     "Sunnyvale Downtown": {
-      weekday: [0, 2， 3, 2， 1, 0],
+      weekday: [0, 2, 3, 2, 1, 0],
       weekend: [0, 1, 1, 1, 1, 0]
     },
     "Santana Row & Valley Fair": {
-      weekday: [0， 1， 1, 2, 3, 2],
-      weekend: [0， 1， 2， 3, 3, 2]
+      weekday: [0, 1, 1, 2, 3, 2],
+      weekend: [0, 1, 2, 3, 3, 2]
     },
     "SFO Airport": {
-      weekday: [2， 3， 2, 2, 2， 2],
-      weekend: [2， 3， 2, 2, 2， 2]
-    }，
+      weekday: [2, 3, 2, 2, 2, 2],
+      weekend: [2, 3, 2, 2, 2, 2]
+    },
     "SJC Airport & Hotel Zone": {
-      weekday: [1， 2, 2， 2, 2, 1],
-      weekend: [1， 2， 2, 2， 2， 1]
-    }，
+      weekday: [1, 2, 2, 2, 2, 1],
+      weekend: [1, 2, 2, 2, 2, 1]
+    },
     "Downtown San Jose (Expansion)": {
-      weekday: [0， 2， 2, 2， 2， 1]，
-      weekend: [0， 1， 2， 2， 3， 2]
+      weekday: [0, 2, 2, 2, 2, 1],
+      weekend: [0, 1, 2, 2, 3, 2]
     },
     "San Jose Downtown": {
-      weekday: [0， 2, 2, 2, 2, 1],
-      weekend: [0， 1， 2, 2, 3, 2]
-    }，
+      weekday: [0, 2, 2, 2, 2, 1],
+      weekend: [0, 1, 2, 2, 3, 2]
+    },
     "Gilroy Far South": {
-      weekday: [0， 1, 1, 1, 0, 0],
-      weekend: [0， 1, 1, 1, 0, 0]
+      weekday: [0, 1, 1, 1, 0, 0],
+      weekend: [0, 1, 1, 1, 0, 0]
     }
   };
 
-  function getHeat(zoneName， isWeekend， slotIndex) {
+  function getHeat(zoneName, isWeekend, slotIndex) {
     var profile = zoneHeatProfiles[zoneName];
     if (!profile) return 1; // 没有配置就当作“正常”
     var arr = isWeekend ? profile.weekend : profile.weekday;
@@ -578,18 +578,18 @@
   }
 
   function applyHeat(slotIndex, useCurrentTime) {
-    var 当前 = new Date();
-    var day = 当前.getDay(); // 0=Sun, 6=Sat
+    var now = new Date();
+    var day = now.getDay(); // 0=Sun, 6=Sat
     var isWeekend = (day === 0 || day === 6);
 
     if (useCurrentTime) {
       slotIndex = findSlotIndexByHour(now.getHours());
-      document。getElementById("time_slider").value = slotIndex;
+      document.getElementById("time_slider").value = slotIndex;
     }
 
     var slot = timeSlots[slotIndex];
     var label = slot.label + (useCurrentTime ? "（当前时间）" : "");
-    document。getElementById("time_label").textContent = label;
+    document.getElementById("time_label").textContent = label;
 
     // 通过热度调节填充透明度
     allCircles.forEach(function (c) {
@@ -610,14 +610,14 @@
   var timeSlider = document.getElementById("time_slider");
   var autoTimeCheckbox = document.getElementById("auto_time");
 
-  timeSlider。addEventListener("input", function () {
+  timeSlider.addEventListener("input", function () {
     // 用户手动拖动滑块 → 关闭自动模式
-    autoTimeCheckbox。checked = false;
-    applyHeat(parseInt(timeSlider。value, 10), false);
+    autoTimeCheckbox.checked = false;
+    applyHeat(parseInt(timeSlider.value, 10), false);
   });
 
-  autoTimeCheckbox。addEventListener("change", function () {
-    applyHeat(parseInt(timeSlider。value, 10), autoTimeCheckbox。checked);
+  autoTimeCheckbox.addEventListener("change", function () {
+    applyHeat(parseInt(timeSlider.value, 10), autoTimeCheckbox.checked);
   });
 
   // 初始：按当前时间应用一次
