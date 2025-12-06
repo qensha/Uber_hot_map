@@ -23,7 +23,6 @@
       height: 100%;
     }
 
-    /* UI 面板：图层开关 + 时间控件 */
     #ui-panel {
       position: absolute;
       z-index: 1000;
@@ -37,30 +36,23 @@
       font-size: 13px;
       max-width: 260px;
     }
-
     #ui-panel h4 {
       margin: 0 0 4px 0;
       font-size: 14px;
       font-weight: 600;
     }
-
     .layer-toggles label,
     .time-controls label {
       display: block;
       margin: 2px 0;
       cursor: pointer;
     }
-
-    #time_slider {
-      width: 100%;
-    }
-
+    #time_slider { width: 100%; }
     #time_label {
       display: inline-block;
       margin-top: 4px;
       font-weight: 600;
     }
-
     .heat-scale {
       margin-top: 4px;
       font-size: 12px;
@@ -77,7 +69,7 @@
   <div class="layer-toggles">
     <label><input type="checkbox" id="chk_hot" checked> HOT 热区（绿色）</label>
     <label><input type="checkbox" id="chk_dead" checked> DEAD 死区（红色）</label>
-    <label><input type="checkbox" id="chk_premium" checked> PREMIUM 小费顶级（黄色）</label>
+    <label><input type="checkbox" id="chk_premium" checked> PREMIUM 小费顶级（金色）</label>
   </div>
 
   <hr style="margin:6px 0;">
@@ -100,7 +92,16 @@
 </div>
 
 <script>
-  // ------------------ 1. 初始化地图 ------------------
+  /* ------------------ 必须补充的 DOM 变量声明 ------------------ */
+  const chk_hot = document.getElementById("chk_hot");
+  const chk_dead = document.getElementById("chk_dead");
+  const chk_premium = document.getElementById("chk_premium");
+
+  const time_slider = document.getElementById("time_slider");
+  const time_label = document.getElementById("time_label");
+  const auto_time = document.getElementById("auto_time");
+
+  /* ------------------ 初始化地图 ------------------ */
   var map = L.map("map", {
     center: [37.6, -122.1],
     zoom: 9
@@ -110,7 +111,7 @@
     attribution: "Data © OpenStreetMap contributors"
   }).addTo(map);
 
-  // ------------------ 2. 区域数据（HOT / DEAD / PREMIUM） ------------------
+  /* ------------------ 区域数据 ------------------ */
   var zones = [
     { name: "SFO", category: "HOT", lat: 37.6213, lng: -122.379, radius_mi: 2.0, note: "无脑接，回程单极快" },
     { name: "San Jose Downtown", category: "HOT", lat: 37.3382, lng: -121.8863, radius_mi: 1.5, note: "周末夜间 Surge 高" },
@@ -119,21 +120,22 @@
     { name: "Downtown San Francisco Core", category: "HOT", lat: 37.789, lng: -122.401, radius_mi: 1.8, note: "金融区+Union Square+SoMa" },
     { name: "Fishermans Wharf & Pier 39", category: "HOT", lat: 37.808, lng: -122.417, radius_mi: 1.2, note: "渔人码头+Pier 39" },
 
-    { name: "Mission & Castro Nightlife", category: "HOT", lat: 37.759, lng: -122.426, radius_mi: 1.4, note: "Mission/Castro 夜生活" },
-    { name: "Marina & Cow Hollow", category: "HOT", lat: 37.8, lng: -122.438, radius_mi: 1.0, note: "高收入住宅+餐饮" },
-    { name: "Oakland Downtown & Lake Merritt", category: "HOT", lat: 37.804, lng: -122.271, radius_mi: 1.6, note: "Oakland 市中心+湖区" },
-    { name: "Jack London Square", category: "HOT", lat: 37.795, lng: -122.278, radius_mi: 0.9, note: "港口餐饮区" },
-    { name: "UC Berkeley & Downtown Berkeley", category: "HOT", lat: 37.87, lng: -122.268, radius_mi: 1.2, note: "校园+商业" },
+    /* HOT 扩展 */
+    { name: "Mission & Castro Nightlife", category: "HOT", lat: 37.759, lng: -122.426, radius_mi: 1.4, note: "夜生活区" },
+    { name: "Marina & Cow Hollow", category: "HOT", lat: 37.8, lng: -122.438, radius_mi: 1.0, note: "高收入住宅" },
+    { name: "Oakland Downtown & Lake Merritt", category: "HOT", lat: 37.804, lng: -122.271, radius_mi: 1.6, note: "Oakland 中心" },
+    { name: "Jack London Square", category: "HOT", lat: 37.795, lng: -122.278, radius_mi: 0.9, note: "港口餐饮" },
+    { name: "UC Berkeley & Downtown Berkeley", category: "HOT", lat: 37.87, lng: -122.268, radius_mi: 1.2, note: "校园" },
     { name: "Walnut Creek Downtown", category: "HOT", lat: 37.901, lng: -122.061, radius_mi: 1.3, note: "郊区热点" },
-    { name: "Dublin–Pleasanton BART & Stoneridge", category: "HOT", lat: 37.699, lng: -121.93, radius_mi: 1.6, note: "通勤+购物" },
+    { name: "Dublin–Pleasanton BART & Stoneridge", category: "HOT", lat: 37.699, lng: -121.93, radius_mi: 1.6, note: "购物" },
     { name: "SFO Airport", category: "HOT", lat: 37.615, lng: -122.39, radius_mi: 2.5, note: "大型机场需求" },
     { name: "Millbrae Transit & Hotel Strip", category: "HOT", lat: 37.598, lng: -122.386, radius_mi: 1.2, note: "交通枢纽" },
     { name: "San Mateo & Bridgepointe", category: "HOT", lat: 37.563, lng: -122.325, radius_mi: 1.6, note: "办公+购物" },
     { name: "Palo Alto & Stanford Campus", category: "HOT", lat: 37.444, lng: -122.165, radius_mi: 1.8, note: "大学区" },
     { name: "Mountain View Castro Street", category: "HOT", lat: 37.393, lng: -122.078, radius_mi: 1.2, note: "商业街" },
     { name: "Googleplex Area", category: "HOT", lat: 37.422, lng: -122.084, radius_mi: 1.0, note: "园区通勤" },
-    { name: "Sunnyvale Downtown", category: "HOT", lat: 37.368, lng: -122.036, radius_mi: 1.1, note: "商业+通勤" },
-    { name: "Cupertino Apple Park", category: "HOT", lat: 37.3349, lng: -122.009, radius_mi: 1.3, note: "科技园区" },
+    { name: "Sunnyvale Downtown", category: "HOT", lat: 37.368, lng: -122.036, radius_mi: 1.1, note: "通勤热点" },
+    { name: "Cupertino Apple Park", category: "HOT", lat: 37.3349, lng: -122.009, radius_mi: 1.3, note: "科技区" },
     { name: "Santana Row & Valley Fair", category: "HOT", lat: 37.322, lng: -121.946, radius_mi: 1.2, note: "购物餐饮" },
     { name: "SJC Airport", category: "HOT", lat: 37.363, lng: -121.928, radius_mi: 2.0, note: "San Jose 机场" },
     { name: "Downtown San Jose (Expansion)", category: "HOT", lat: 37.335, lng: -121.89, radius_mi: 1.8, note: "市中心扩展" },
@@ -143,17 +145,17 @@
     { name: "Gilroy Far South", category: "DEAD", lat: 37.005, lng: -121.568, radius_mi: 5.0, note: "返程空驶" },
     { name: "Morgan Hill", category: "DEAD", lat: 37.13, lng: -121.654, radius_mi: 3.5, note: "需求少" },
     { name: "Santa Cruz", category: "DEAD", lat: 36.974, lng: -122.03, radius_mi: 4.0, note: "跨山返程空" },
-    { name: "Pacifica", category: "DEAD", lat: 37.613, lng: -122.486, radius_mi: 3.0, note: "海岸单向" },
+    { name: "Pacifica", category: "DEAD", lat: 37.613, lng: -122.486, radius_mi: 3.0, note: "沿海单向" },
     { name: "Tracy", category: "DEAD", lat: 37.739, lng: -121.425, radius_mi: 4.5, note: "远离主城" },
-    { name: "Brentwood", category: "DEAD", lat: 37.93, lng: -121.695, radius_mi: 3.8, note: "偏远" },
+    { name: "Brentwood", category: "DEAD", lat: 37.93, lng: -121.695, radius_mi: 3.8, note: "需求弱" },
     { name: "Antioch", category: "DEAD", lat: 38.005, lng: -121.806, radius_mi: 4.0, note: "低密度" },
     { name: "Napa", category: "DEAD", lat: 38.297, lng: -122.287, radius_mi: 4.5, note: "旅游返程弱" },
 
     /* PREMIUM 区 */
-    { name: "Palo Alto / Stanford / Menlo Park - Premium", category: "PREMIUM", lat: 37.444, lng: -122.165, radius_mi: 2.0, note: "综合单价+小费第一" },
+    { name: "Palo Alto / Stanford / Menlo Park - Premium", category: "PREMIUM", lat: 37.444, lng: -122.165, radius_mi: 2.0, note: "小费最佳区" },
     { name: "San Francisco Downtown (FiDi–SoMa) - Premium", category: "PREMIUM", lat: 37.789, lng: -122.401, radius_mi: 1.7, note: "FiDi+SoMa 高单价" },
-    { name: "Mountain View / Sunnyvale Tech Corridor - Premium", category: "PREMIUM", lat: 37.385, lng: -122.041, radius_mi: 2.0, note: "科技通勤顶级区" },
-    { name: "Santana Row & Valley Fair - Premium", category: "PREMIUM", lat: 37.322, lng: -121.946, radius_mi: 1.3, note: "夜生活+购物爆点" },
+    { name: "Mountain View / Sunnyvale Tech Corridor - Premium", category: "PREMIUM", lat: 37.385, lng: -122.041, radius_mi: 2.0, note: "科技走廊" },
+    { name: "Santana Row & Valley Fair - Premium", category: "PREMIUM", lat: 37.322, lng: -121.946, radius_mi: 1.3, note: "夜生活爆点" },
     { name: "SFO Airport - Premium", category: "PREMIUM", lat: 37.615, lng: -122.39, radius_mi: 2.5, note: "高溢价机场单" }
   ];
 
@@ -161,7 +163,7 @@
     return mi * 1609.34;
   }
 
-  // ------------------ 建立图层组 ------------------
+  /* ------------------ 建立图层组 ------------------ */
   var hotGroup = L.featureGroup().addTo(map);
   var deadGroup = L.featureGroup().addTo(map);
   var premiumGroup = L.featureGroup().addTo(map);
@@ -169,9 +171,10 @@
   var allCircles = [];
 
   zones.forEach(function (z) {
-    var color = (z.category === "DEAD") ? "red" :
-                (z.category === "PREMIUM") ? "yellow" :
-                "green";
+    var color =
+      z.category === "DEAD" ? "red" :
+      z.category === "PREMIUM" ? "#FFD700" :
+      "green";
 
     var c = L.circle([z.lat, z.lng], {
       color: color,
@@ -193,8 +196,7 @@
     allCircles.push(c);
   });
 
-  /* ------------------ ★★★★★ GPS 定位代码插入位置 ★★★★★ ------------------ */
-
+  /* ------------------ GPS 定位 ------------------ */
   var userMarker = null;
   var userAccuracy = null;
 
@@ -232,27 +234,46 @@
   });
 
   /* ------------------ 图层开关 ------------------ */
-  chk_hot.onchange = e => e.target.checked ? map.addLayer(hotGroup) : map.removeLayer(hotGroup);
-  chk_dead.onchange = e => e.target.checked ? map.addLayer(deadGroup) : map.removeLayer(deadGroup);
-  chk_premium.onchange = e => e.target.checked ? map.addLayer(premiumGroup) : map.removeLayer(premiumGroup);
+  chk_hot.onchange = e =>
+    e.target.checked ? map.addLayer(hotGroup) : map.removeLayer(hotGroup);
 
-  /* ------------------ 时间热力图部分 ------------------ */
+  chk_dead.onchange = e =>
+    e.target.checked ? map.addLayer(deadGroup) : map.removeLayer(deadGroup);
 
+  chk_premium.onchange = e =>
+    e.target.checked ? map.addLayer(premiumGroup) : map.removeLayer(premiumGroup);
+
+  /* ------------------ 时间热力图 ------------------ */
   var timeSlots = [
     { label: "00:00-05:00", start: 0, end: 5 },
     { label: "05:00-09:00", start: 5, end: 9 },
     { label: "09:00-15:00", start: 9, end: 15 },
     { label: "15:00-19:00", start: 15, end: 19 },
-    { label: "19:00-23:00"， start: 19， end: 23 }，
+    { label: "19:00-23:00", start: 19, end: 23 },
     { label: "23:00-24:00", start: 23, end: 24 }
   ];
 
   var zoneHeatProfiles = {
-    "Palo Alto / Stanford / Menlo Park - Premium": { weekday:[0,2,2,2,1,0], weekend:[0,1,2,2,2,0] },
-    "San Francisco Downtown (FiDi–SoMa) - Premium": { weekday:[1,3,3,3,2,1], weekend:[0,1,2,2,3,2] },
-    "Mountain View / Sunnyvale Tech Corridor - Premium": { weekday:[0,2,3,2,1,0], weekend:[0,1,1,1,1,0] },
-    "Santana Row & Valley Fair - Premium": { weekday:[0,1,1,2,3,2], weekend:[0,1,2,3,3,2] },
-    "SFO Airport - Premium": { weekday:[2,3,2,2,2,2], weekend:[2,3,2,2,2,2] }
+    "Palo Alto / Stanford / Menlo Park - Premium": {
+      weekday: [0,2,2,2,1,0],
+      weekend: [0,1,2,2,2,0]
+    },
+    "San Francisco Downtown (FiDi–SoMa) - Premium": {
+      weekday: [1,3,3,3,2,1],
+      weekend: [0,1,2,2,3,2]
+    },
+    "Mountain View / Sunnyvale Tech Corridor - Premium": {
+      weekday: [0，2，3,2，1,0],
+      weekend: [0,1,1,1,1,0]
+    },
+    "Santana Row & Valley Fair - Premium": {
+      weekday: [0，1，1，2，3,2]，
+      weekend: [0,1,2,3,3,2]
+    },
+    "SFO Airport - Premium": {
+      weekday: [2,3,2,2,2,2],
+      weekend: [2,3,2,2,2,2]
+    }
   };
 
   function getHeat(zoneName, weekend, slot) {
@@ -283,21 +304,21 @@
     time_slider.value = slot;
   }
 
-  time_slider.oninput = () => {
-    auto_time.checked = false;
+  time_slider。oninput = () => {
+    auto_time。checked = false;
     applyHeat(parseInt(time_slider.value), false);
   };
 
-  auto_time.onchange = () => applyHeat(parseInt(time_slider.value), auto_time.checked);
+  auto_time。onchange = () =>
+    applyHeat(parseInt(time_slider。value)， auto_time.checked);
 
-  applyHeat(0, true);
+  applyHeat(0， true);
 
   setInterval(() => {
     if (auto_time.checked) applyHeat(0, true);
-  }, 60000);
+  }， 60000);
 
 </script>
 
 </body>
 </html>
-
